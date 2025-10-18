@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interview Prepper</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div class="wrap hstack">
+      <div class="brand">
+        <img class="logo" src="assets/logo.svg" alt="Coach Prep" />
+        <div>
+          <div style="font-weight:800;letter-spacing:.3px">Coach Prep</div>
+          <div class="small">Practice • Analyze • Improve</div>
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <button id="toggleMock" class="btn secondary" title="Switch between mock data and real API">Use Mock API</button>
+      <button id="recordBtn" class="btn" title="Record up to 60s">● Record</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <div class="body grid">
+        <h2>1 Upload or Record</h2>
+        <div class="sub">Short video under 60 seconds. We transcribe, analyze your voice, and generate feedback.</div>
+
+        <label class="drop" id="drop">
+          <input class="file-input" id="file" type="file" accept="video/*" />
+          <div>Drag & drop a video here, or <span class="link">browse</span></div>
+          <div class="small" style="margin-top:6px">Accepted: MP4, MOV, WEBM • Max 60s</div>
+        </label>
+
+        <div id="videoWrap" class="video-wrap" style="display:none">
+          <video id="player" controls playsinline></video>
+        </div>
+
+        <div class="meta" id="meta" style="display:none">
+          <div id="fname">Name: —</div>
+          <div id="fsize">Size: —</div>
+        </div>
+
+        <div>
+          <div class="row">
+            <button id="processBtn" class="btn" disabled>Run Analysis</button>
+            <button id="resetBtn" class="btn secondary" disabled>Reset</button>
+          </div>
+          <div style="margin-top:10px" class="progress"><div id="pbar" class="bar"></div></div>
+          <div class="stepper" id="steps">
+            <div class="chip">Upload</div>
+            <div class="chip">Transcribe</div>
+            <div class="chip">Voice</div>
+            <div class="chip">AI Feedback</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="body grid">
+        <h2>2 Results</h2>
+        <div class="kpis">
+          <div class="kpi"><div class="label">Confidence</div><div id="kpiConf" class="value">—</div></div>
+          <div class="kpi"><div class="label">WPM</div><div id="kpiWpm" class="value">—</div></div>
+          <div class="kpi"><div class="label">Filler Words</div><div id="kpiFillers" class="value">—</div></div>
+        </div>
+
+        <div class="confidence">
+          <div class="row"><div class="small">Confidence gauge</div><div class="spacer"></div><div id="confPct" class="small">—</div></div>
+          <div class="gauge"><div id="gfill" class="fill"></div></div>
+        </div>
+
+        <div class="card-item">
+          <div class="row" style="justify-content:space-between;align-items:flex-start">
+            <div>
+              <div style="font-weight:700;margin-bottom:6px">Transcript</div>
+              <div id="transcript" class="small" style="white-space:pre-wrap;line-height:1.5">—</div>
+            </div>
+            <button id="copyBtn" class="btn secondary" style="white-space:nowrap">Copy</button>
+          </div>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+      </div>
+    </section>
+
+    <section class="card" style="grid-column:1 / -1">
+      <div class="body grid">
+        <h2>History & Compare <span class="small">(optional memory)</span></h2>
+        <div class="sub">When enabled, we can pull your past attempts to compare trends over time.</div>
+        <div class="row">
+          <button id="compareBtn" class="btn secondary">Compare Last Two Attempts</button>
+          <div class="small">Coming soon: charts & side-by-side transcripts</div>
+        </div>
+        <div id="compareOut" class="card-item small" style="display:none"></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer small">
+    <div class="mono">Frontend: HTML/CSS/JS • Backend: Java/Spring Boot • AI: Whisper + GPT-4</div>
+    <div style="margin-top:6px">API contracts in <span class="mono">README.md</span>.</div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
