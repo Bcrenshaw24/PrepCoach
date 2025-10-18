@@ -10,17 +10,9 @@ import whisper
 # Transcibes .wav to .txt
 # Using OpenApis's whisper to transcribe
 # Returns a String of words
-def TranScribe(fileName: str)-> str: 
+def TranScribe(fileName: str): 
     model = whisper.load_model("base")
+    
     result = model.transcribe(fileName)
-    return result["text"]
+    return result["text"].lower()
     print("Transcripted ")
-
-# 
-# 
-#
-
-#Tests
-fileName = "output.wav"
-x = TranScribe(fileName)
-print(x)
