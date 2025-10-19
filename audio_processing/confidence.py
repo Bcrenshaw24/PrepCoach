@@ -18,13 +18,13 @@ def emotion(model, extractor, audio):
     # Map to emotion label
     labels = model.config.id2label
 
-    pretty_labels = { 
-        "LABEL_0": 2, 
-        "LABEL_1": 5, 
-        "LABEL_2": 3,
-        "LABEL_3": 1,
-        "LABEL_4": 6, 
-        "LABEL_5": 4
+    pretty_labels = {
+        "LABEL_0": "2", 
+        "LABEL_1": "5", 
+        "LABEL_2": "3",
+        "LABEL_3": "1",
+        "LABEL_4": "6", 
+        "LABEL_5": "4"
     }
     return pretty_labels[labels[predicted_class]]
 

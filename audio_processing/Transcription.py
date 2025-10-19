@@ -12,7 +12,7 @@ import whisper
 # Returns a String of words
 def TranScribe(fileName: str): 
     model = whisper.load_model("base")
-    
     result = model.transcribe(fileName)
+    
     return result["text"].lower()
     print("Transcripted ")
