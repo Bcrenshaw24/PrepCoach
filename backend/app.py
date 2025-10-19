@@ -26,10 +26,12 @@ class APIResponse(BaseModel):
 async def upload_audio(file: UploadFile = File(...)):
     video = await file.read()
     audio = convert_uploaded_mp4_to_wav(video)
-    chunks = requests.get("https://api.example.com")
-    trans = requests.get()
+    chunks = requests.post("http://127.0.0.1:8000",audio)
+    trans = requests.post("http://127.0.0.1:8001", audio)
+    data = trans.json()["message"]
     conf = confidence_score(140, 4, chunks)
-    response = llm(confidence, trans.get(0))
+    response = llm_response(conf, trans)
+    return {"response": response, "wpm": trans["average"], "most_used_filler": trans["most_filler"], "score": conf}
    
 
 
