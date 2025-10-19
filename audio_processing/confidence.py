@@ -1,6 +1,8 @@
 import pydantic 
 import torch
 import librosa
+from pydub import AudioSegment
+import math
 from transformers import Wav2Vec2ForSequenceClassification, Wav2Vec2FeatureExtractor
 
 def emotion(model, extractor, audio):
@@ -25,3 +27,5 @@ def emotion(model, extractor, audio):
         "LABEL_5": "Neutral"
     }
     return pretty_labels[labels[predicted_class]]
+
+

@@ -3,19 +3,19 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-api_key = os.getenv("KRONOS")
-client = KronosLabs(api_key=api_key)
+
+def llm_response(score, filler):
+    api_key = os.getenv("KRONOS")
+    client = KronosLabs(api_key=api_key)
 
 
 
-# Streaming chat completion with hermes model
-stream = client.chat.completions.create(
-    prompt="Hows your day",
-    model="hermes",
-    temperature=0.7,
-    is_stream=True
-)
+    # Streaming chat completion with hermes model
+    response = client.chat.completions.create(
+        prompt=f"Respond giving feedback on a users confidence given theis confidence score and the most used filler word {filler}, give the user helpful feed back on technical interviews",
+        model="hermes",
+        temperature=0.7,
+        is_stream=False
+    )
 
-for chunk in stream:
-    if chunk.choices[0].delta.content:
-        print(chunk.choices[0].delta.content, end="")
+    return response.choices[0].message.content
