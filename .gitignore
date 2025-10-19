@@ -1,4 +1,10 @@
+<<<<<<< HEAD
+.env 
+test_audio
+.venv
+=======
 .env 
 __pycache__ 
 test_audio 
 .venvS
+>>>>>>> 75ce0334088a36e9b5636fd004140b740e5bb869

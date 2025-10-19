@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coach Prep</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Pyodide (Python-in-browser) for the Python Practice panel -->
+  <script defer src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+</head>
+<body>
+  <header>
+    <div class="wrap hstack">
+      <div class="brand">
+        <img class="logo" src="assets/logo.svg" alt="Coach Prep" />
+        <div>
+          <div style="font-weight:800;letter-spacing:.3px">Coach Prep</div>
+          <div class="small">Practice • Analyze • Improve</div>
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <button id="toggleMock" class="btn secondary" title="Switch between mock data and real API">Use Mock API</button>
+      <button id="recordBtn" class="btn" title="Record up to 60s">● Record</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1) Upload / Record -->
+    <section class="card">
+      <div class="body grid">
+        <h2>1) Upload or Record</h2>
+        <div class="sub">Short video under 60 seconds. We transcribe, analyze your voice, and generate feedback.</div>
+
+        <label class="drop" id="drop">
+          <input class="file-input" id="file" type="file" accept="video/*" />
+          <div>Drag & drop a video here, or <span class="link">browse</span></div>
+          <div class="small" style="margin-top:6px">Accepted: MP4, MOV, WEBM • Max 60s</div>
+        </label>
+
+        <div id="videoWrap" class="video-wrap" style="display:none">
+          <video id="player" controls playsinline></video>
+        </div>
+
+        <div class="meta" id="meta" style="display:none">
+          <div id="fname">Name: —</div>
+          <div id="fsize">Size: —</div>
+        </div>
+
+        <div>
+          <div class="row">
+            <button id="processBtn" class="btn" disabled>Run Analysis</button>
+            <button id="resetBtn" class="btn secondary" disabled>Reset</button>
+          </div>
+          <div style="margin-top:10px" class="progress"><div id="pbar" class="bar"></div></div>
+          <div class="stepper" id="steps">
+            <div class="chip">Upload</div>
+            <div class="chip">Transcribe</div>
+            <div class="chip">Voice</div>
+            <div class="chip">AI Feedback</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2) Results -->
+    <section class="card">
+      <div class="body grid">
+        <h2>2) Results</h2>
+        <div class="kpis">
+          <div class="kpi"><div class="label">Confidence</div><div id="kpiConf" class="value">—</div></div>
+          <div class="kpi"><div class="label">WPM</div><div id="kpiWpm" class="value">—</div></div>
+          <div class="kpi"><div class="label">Filler Words</div><div id="kpiFillers" class="value">—</div></div>
+        </div>
+
+        <div class="confidence">
+          <div class="row"><div class="small">Confidence gauge</div><div class="spacer"></div><div id="confPct" class="small">—</div></div>
+          <div class="gauge"><div id="gfill" class="fill"></div></div>
+        </div>
+
+        <div class="card-item">
+          <div class="row" style="justify-content:space-between;align-items:flex-start">
+            <div>
+              <div style="font-weight:700;margin-bottom:6px">Transcript</div>
+              <div id="transcript" class="small" style="white-space:pre-wrap;line-height:1.5">—</div>
+            </div>
+            <button id="copyBtn" class="btn secondary" style="white-space:nowrap">Copy</button>
+          </div>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+      </div>
+    </section>
+
+    <!-- 2.5) History / Compare -->
+    <section class="card" style="grid-column:1 / -1">
+      <div class="body grid">
+        <h2>History & Compare <span class="small">(optional memory)</span></h2>
+        <div class="sub">When enabled, we can pull your past attempts to compare trends over time.</div>
+        <div class="row">
+          <button id="compareBtn" class="btn secondary">Compare Last Two Attempts</button>
+          <div class="small">Coming soon: charts & side-by-side transcripts</div>
+        </div>
+        <div id="compareOut" class="card-item small" style="display:none"></div>
+      </div>
+    </section>
+
+    <!-- 3) Coding Practice (JavaScript) -->
+    <section id="codeSection" class="card" style="grid-column:1 / -1">
+      <div class="body grid">
+        <h2>3) Coding Practice <span class="small">(JavaScript)</span></h2>
+        <div class="sub">Write your function in JS (sync or <b>async</b>). You can run locally or via the <b>Backend Judge</b>.</div>
+
+        <div class="code-grid">
+          <div class="problem">
+            <div class="row" style="justify-content:space-between;align-items:center">
+              <div class="row">
+                <label class="small" for="problemSelect" style="margin-right:8px">Problem</label>
+                <select id="problemSelect" class="input" style="width:auto;min-width:220px"></select>
+              </div>
+              <button id="resetCode" class="btn secondary">Reset Code</button>
+            </div>
+
+            <div class="card-item">
+              <div id="problemTitle" style="font-weight:800">—</div>
+              <div id="problemPrompt" class="small" style="white-space:pre-wrap;line-height:1.5;margin-top:6px">—</div>
+            </div>
+
+            <div class="card-item small mono">
+              <div>Language:
+                <select id="langSelect" class="input" style="width:auto;min-width:140px">
+                  <option value="javascript" selected>JavaScript</option>
+                  <option value="python">Python</option>
+                  <option value="java">Java</option>
+                </select>
+                <span class="small" style="margin-left:8px">(for backend judge)</span>
+              </div>
+              <div>Expected function: <span id="fnName">—</span></div>
+            </div>
+          </div>
+
+          <div class="editorWrap">
+            <textarea id="editor" class="editor" spellcheck="false"></textarea>
+
+            <div class="card-item small">
+              <div class="row" style="gap:16px;align-items:center">
+                <label class="small"># Test Cases
+                  <select id="testCount" class="input" style="width:auto;min-width:80px">
+                    <option>3</option><option selected>6</option><option>8</option><option>12</option>
+                  </select>
+                </label>
+
+                <label class="switch small">
+                  <input type="checkbox" id="randomizeCb" checked />
+                  <span>Randomize each run</span>
+                </label>
+
+                <label class="switch small">
+                  <input type="checkbox" id="useServerJudgeCb" />
+                  <span>Use Backend Judge</span>
+                </label>
+
+                <div class="spacer"></div>
+                <div class="small">Attempts left: <b id="attemptsLeft">3</b></div>
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:10px">
+              <button id="runBtn" class="btn">Run Tests</button>
+              <button id="submitBtn" class="btn secondary">Submit Attempt</button>
+            </div>
+
+            <div id="serverStatus" class="small mono status-line" style="display:none;margin-top:6px"></div>
+
+            <div id="verdict" class="verdict" style="margin-top:8px">Verdict: —</div>
+            <div id="results" class="resultsTable card-item small" style="margin-top:10px"></div>
+
+            <div class="card-item small" style="margin-top:10px">
+              <div style="font-weight:700;margin-bottom:6px">Submission History (last 3)</div>
+              <div id="historyList" class="history-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4) Python Practice (Pyodide) -->
+    <section id="pySection" class="card" style="grid-column:1 / -1">
+      <div class="body grid">
+        <h2>4) Python Practice <span class="small">(beta • runs in your browser)</span></h2>
+        <div class="sub">Edit <code>solution(nums, target)</code>. Click <b>Run Python</b> to execute <b>3 default tests</b>, or provide custom tests JSON.</div>
+
+        <div class="py-grid">
+          <div class="py-left">
+            <div class="card-item small mono">
+              <div><b>Name:</b> <span id="pyName">Two Sum</span></div>
+              <div style="margin-top:6px"><b>Outline:</b> <span id="pyOutline">Given an integer array nums and an integer target, return indices [i,j] (i &lt; j) where nums[i] + nums[j] == target. Assume exactly one valid answer exists.</span></div>
+            </div>
+
+            <textarea id="pyEditor" class="editor" spellcheck="false"></textarea>
+
+            <div class="card-item small">
+              <div style="font-weight:700;margin-bottom:6px">Optional: Custom tests JSON</div>
+              <div class="small" style="margin-bottom:6px">Format: <code>{"tests":[{"nums":[2,7,11,15],"target":9,"expect":[0,1]}]}</code></div>
+              <textarea id="pyTests" class="editor small" style="min-height:120px" placeholder='{"tests":[{"nums":[1,5,3,2],"target":8,"expect":[1,2]}]}'></textarea>
+            </div>
+
+            <div class="row">
+              <button id="runPyBtn" class="btn">Run Python</button>
+            </div>
+          </div>
+
+          <div class="py-right">
+            <div id="pyVerdict" class="verdict" style="margin-bottom:8px">Verdict: —</div>
+            <div id="pyResults" class="resultsTable card-item small"></div>
+            <pre id="pyRaw" class="card-item small" style="margin-top:10px;white-space:pre-wrap"></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5) API Playground -->
+    <section id="apiSection" class="card" style="grid-column:1 / -1">
+      <div class="body grid">
+        <h2>5) API Playground</h2>
+        <div class="sub">Quickly call your backend endpoints. Honors the <b>Use Mock API</b> toggle for safe demos.</div>
+
+        <div class="api-grid">
+          <div class="card-item">
+            <label class="small">Endpoint (relative or full URL)</label>
+            <input id="apiEndpoint" class="input mono" value="/api/health" />
+          </div>
+
+          <div class="card-item">
+            <label class="small">Method</label>
+            <select id="apiMethod" class="input" style="width:auto;min-width:120px">
+              <option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option><option>PATCH</option>
+            </select>
+          </div>
+
+          <div class="card-item">
+            <label class="small">Authorization (optional)</label>
+            <input id="apiAuth" class="input mono" placeholder="Bearer &lt;token&gt;" />
+          </div>
+
+          <div class="card-item" style="grid-column:1 / -1">
+            <label class="small">Body JSON (optional)</label>
+            <textarea id="apiBody" class="editor small" style="min-height:140px" placeholder='{"key":"value"}'></textarea>
+          </div>
+
+          <div class="row" style="grid-column:1 / -1">
+            <button id="apiCallBtn" class="btn">Call API</button>
+            <div id="apiStatus" class="small mono status-line" style="margin-left:8px"></div>
+          </div>
+
+          <pre id="apiOutput" class="card-item small pretty-json" style="grid-column:1 / -1;white-space:pre-wrap"></pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="footer small">
+    <div class="mono">Frontend: HTML/CSS/JS • Backend: Java/Spring Boot • AI: Whisper + GPT-4</div>
+    <div style="margin-top:6px">API contracts in <span class="mono">README.md</span>.</div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
+
+
