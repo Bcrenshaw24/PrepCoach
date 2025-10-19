@@ -12,7 +12,7 @@ def llm_response(score, filler):
 
     # Streaming chat completion with hermes model
     response = client.chat.completions.create(
-        prompt=f"Respond giving feedback on a users confidence given theis confidence score and the most used filler word {filler}, give the user helpful feed back on technical interviews",
+        prompt=f"Respond to a user given this confidence score {score} and the most used filler word {filler}, give the user helpful feed back on technical interviews and how to improve",
         model="hermes",
         temperature=0.5,
         is_stream=False
