@@ -28,13 +28,3 @@ def confidence_score(wpm, fillers, emotion_chunks):
     e = emotion_score(emotion_chunks)
     total = 0.4 * w + 0.4 * e + 0.2 * f
     return (total / 6) * 100
-
-# Example usage
-chunks = [
-    {"label": "LABEL_4"},
-    {"label": "LABEL_1"},
-    {"label": "LABEL_5"}
-]
-
-conf = confidence_score(140, 4, chunks)
-print("Confidence ≈", round(conf, 1), "%")
