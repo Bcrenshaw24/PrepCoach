@@ -88,6 +88,26 @@
         </div>
 
         <div class="feedback" id="feedback"></div>
+
+        <!-- NEW: LLM Response (from /api/submit) -->
+        <div class="card-item">
+          <div class="row" style="justify-content:space-between;align-items:flex-start">
+            <div>
+              <div style="font-weight:700;margin-bottom:6px">LLM Response</div>
+              <div id="llmResponseText" class="small" style="white-space:pre-wrap;line-height:1.5">—</div>
+             <!--<div class="small" style="margin-top:6px;color:#7a8aa0">Auto-fills after analysis. Uses <span class="mono">/api/submit</span>.</div> -->
+            </div>
+            <button id="copyLlmBtn" class="btn secondary" style="white-space:nowrap">Copy</button>
+          </div>
+        </div>
+
+        <div class="kpis kpis-5">
+          <div class="kpi"><div class="label">WPM</div><div id="llmWpm" class="value">—</div></div>
+          <div class="kpi"><div class="label">Average</div><div id="llmAverage" class="value">—</div></div>
+          <div class="kpi"><div class="label">Most Used Filler</div><div id="llmMostUsedFiller" class="value">—</div></div>
+          <div class="kpi"><div class="label">Most Filler</div><div id="llmMostFiller" class="value">—</div></div>
+          <div class="kpi"><div class="label">Score</div><div id="llmScore" class="value">—</div></div>
+        </div>
       </div>
     </section>
 
@@ -267,6 +287,3 @@
   <script src="app.js"></script>
 </body>
 </html>
-
-
-
