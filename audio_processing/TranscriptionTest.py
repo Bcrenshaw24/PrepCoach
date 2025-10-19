@@ -2,7 +2,7 @@
 #Test Cases
 import Transcription
 import TranscriptionApp
-FileName = "Test.wav"
+FileName = "audio_processing/test_audio/about_time.wav"
 TransFile = Transcription.TranScribe(FileName)
 print("Transcribed sentence:"+ TransFile)
 print("--------------")

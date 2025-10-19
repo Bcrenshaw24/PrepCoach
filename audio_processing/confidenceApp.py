@@ -37,10 +37,3 @@ async def interval_emotions(file_bytes: bytes, segment_seconds: int = 30):
         results.append(int(emo))
 
     return results
-
-if __name__ == "__main__":
-    fileName = "Test.wav"
-    with open(fileName, "rb") as f:
-        file_bytes = f.read()
-    emotions = asyncio.run(interval_emotions(file_bytes))
-    print(emotions)

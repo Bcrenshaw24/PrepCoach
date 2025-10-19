@@ -19,12 +19,12 @@ def emotion(model, extractor, audio):
     labels = model.config.id2label
 
     pretty_labels = { 
-        "LABEL_0": "Sadness", 
-        "LABEL_1": "Anger", 
-        "LABEL_2": "Disgust",
-        "LABEL_3": "Fear",
-        "LABEL_4": "Happiness", 
-        "LABEL_5": "Neutral"
+        "LABEL_0": 2, 
+        "LABEL_1": 5, 
+        "LABEL_2": 3,
+        "LABEL_3": 1,
+        "LABEL_4": 6, 
+        "LABEL_5": 4
     }
     return pretty_labels[labels[predicted_class]]
 

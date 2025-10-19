@@ -1,4 +1,3 @@
-import Transcription
 from fastapi import FastAPI, UploadFile, File
 import Transcription
 from collections import Counter
