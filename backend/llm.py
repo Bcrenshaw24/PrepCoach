@@ -14,7 +14,7 @@ def llm_response(score, filler):
     response = client.chat.completions.create(
         prompt=f"Respond giving feedback on a users confidence given theis confidence score and the most used filler word {filler}, give the user helpful feed back on technical interviews",
         model="hermes",
-        temperature=0.7,
+        temperature=0.5,
         is_stream=False
     )
 
